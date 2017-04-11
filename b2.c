@@ -43,10 +43,9 @@ char *q;
 	tmp = contains(&*tree,q);
 
 	printf("parent= %d\n", (*tmp)->p);
-	//printf("tmp= %d\n", tmp);
-
-/*	if(contains(*tree,q)){
-		printf("&*tree\n");
+	/*
+	if(!(*tmp)->l && (*tmp)-r){
+		((*tmp)->p)->r = 
 	}*/
 }
 
@@ -62,7 +61,6 @@ node **parent;
 		return;
 	}
 	if(strcmp(item->name, (*tree)->name) < 0)
-		//tree.p = tree;
 		insert(&(*tree)->l, item, tree);
 
 	else
