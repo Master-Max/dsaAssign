@@ -41,6 +41,8 @@ char *q;
 	//printf("made node tmp\n");
 
 	tmp = contains(&*tree,q);
+
+	printf("parent= %d\n", (*tmp)->p);
 	//printf("tmp= %d\n", tmp);
 
 /*	if(contains(*tree,q)){
@@ -56,7 +58,7 @@ node **parent;
 {
 	if(!(*tree)) {
 		*tree = item;
-		tree.p = parent;//TODO Figure out parent nodes
+		(*item).p = parent;//TODO Figure out parent nodes
 		return;
 	}
 	if(strcmp(item->name, (*tree)->name) < 0)
