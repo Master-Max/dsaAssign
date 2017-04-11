@@ -4,12 +4,12 @@
 
 typedef struct anode {
 	char *name;
-	struct anode *r, *l;
+	struct anode *r, *l, *p;//TODO decide if i want to make a parent pointer in tree node
 } node;
 
 
 
-contains(tree, q) 
+contains(tree, q)
 node **tree;
 char *q;
 {
@@ -20,7 +20,8 @@ char *q;
 
 	if (strcmp((*tree)->name, q) == 0){
 		printf("yes\n");
-		return(&*tree);
+		printf("contains= %d\n", tree);
+		return tree;
 	}
 	contains(&(*tree)->l, q);
 	contains(&(*tree)->r, q);
@@ -29,30 +30,42 @@ char *q;
 
 delete(tree, q)
 node **tree;
-node *tmp;
 char *q;
 {
-	printf("deleting\n");
-	
-	contains()
+	/*printf("comparing...\n");
+	contains(&*tree,q);
+
+	printf("deleting\n");*/
+
+	node **tmp;
+	//printf("made node tmp\n");
+
+	tmp = contains(&*tree,q);
+	//printf("tmp= %d\n", tmp);
+
+/*	if(contains(*tree,q)){
+		printf("&*tree\n");
+	}*/
 }
 
 
-insert(tree, item) 
+insert(tree, item, parent)
 node **tree;
 node *item;
+node **parent;
 {
 	if(!(*tree)) {
 		*tree = item;
+		tree.p = parent;//TODO Figure out parent nodes
 		return;
 	}
-
 	if(strcmp(item->name, (*tree)->name) < 0)
-		insert(&(*tree)->l, item);
+		//tree.p = tree;
+		insert(&(*tree)->l, item, tree);
 
-	else 
+	else
 		if(strcmp(item->name, (*tree)->name) > 0)
-			insert(&(*tree)->r, item);
+			insert(&(*tree)->r, item, tree);
 }
 
 
@@ -70,7 +83,7 @@ int lvl;
 }
 
 
-/* 
+/*
 The loop below reads from stdin until EOF, then searches
 to see if the BST contains the word found in argv[1].
 
@@ -83,7 +96,7 @@ Lines starting with the ASCII i are to be inserted into the binary search tree.
 Those beginning with 'd' are to be deleted if they exist. If they do not exist,
 output a line of text  saying so and do nothing else.
 
-Stop your read loop at EOF (like it is now). Instead of 
+Stop your read loop at EOF (like it is now). Instead of
 calling contains(), print out the tree; make it a preorder print */
 
 
@@ -102,14 +115,14 @@ char **argv, **envp;
 		b = &(buf[2]);
 		if (buf[0] == 'i') {
 			curr = (node *)malloc(sizeof(node));
-			curr->l = curr->r = NULL;
+			curr->l = curr->r = curr->p = NULL;
 			curr->name = strdup(b);
 			printf("insert: %s\n", b);
-			insert(&root, curr);
+			insert(&root, curr, &root);
 		}
 		if (buf[0] == 'd') {
-			printf("comparing...\n");
-			contains(&root,b);
+			//printf("comparing...\n");
+			//contains(&root,b);
 			delete(&root,b);
 		}
 
