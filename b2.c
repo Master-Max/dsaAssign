@@ -13,18 +13,22 @@ contains(tree, q)
 node **tree;
 char *q;
 {
+	node **t = NULL;
+	t = (node *)malloc(sizeof(node));
 	if(!(*tree)){
 		printf("no node\n");
-		return;
+		return t;
 	}
 
 	if (strcmp((*tree)->name, q) == 0){
 		printf("yes\n");
 		printf("contains= %d\n", tree);
-		return tree;
+		*t = tree;
+		return t;
 	}
 	contains(&(*tree)->l, q);
 	contains(&(*tree)->r, q);
+	//return tmp;
 }
 
 
@@ -42,7 +46,14 @@ char *q;
 
 	tmp = contains(&*tree,q);
 
-	printf("parent= %d\n", (*tmp)->p);
+	printf("out of contains\n");
+	
+	if(tmp){	
+		printf("tmp.name: %s\n", (*tmp)->name);
+
+		printf("parent= %d\n", (*tmp)->p);
+	}
+	
 	/*
 	if(!(*tmp)->l && (*tmp)-r){
 		((*tmp)->p)->r = 
@@ -63,9 +74,8 @@ node **parent;
 	if(strcmp(item->name, (*tree)->name) < 0)
 		insert(&(*tree)->l, item, tree);
 
-	else
-		if(strcmp(item->name, (*tree)->name) > 0)
-			insert(&(*tree)->r, item, tree);
+	if(strcmp(item->name, (*tree)->name) > 0)
+		insert(&(*tree)->r, item, tree);
 }
 
 
