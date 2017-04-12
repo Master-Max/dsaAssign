@@ -7,29 +7,36 @@ typedef struct anode {
 	struct anode *r, *l, *p;//TODO decide if i want to make a parent pointer in tree node
 } node;
 
-
+node**t = NULL;
 
 contains(tree, q)
 node **tree;
 char *q;
 {
-	node **t = NULL;
-	t = (node *)malloc(sizeof(node));
+	//node **t = NULL;
+	//t = (node *)malloc(sizeof(node));
 	if(!(*tree)){
 		printf("no node\n");
-		return t;
+		return;
 	}
 
 	if (strcmp((*tree)->name, q) == 0){
 		printf("yes\n");
-		printf("contains= %d\n", tree);
+		printf("contains= %x\n", tree);
+		printf("name= %s\n", (*tree)->name);
 		*t = tree;
-		return t;
+		return;
 	}
 	contains(&(*tree)->l, q);
 	contains(&(*tree)->r, q);
-	//return tmp;
+	//return t;
 }
+
+/*
+find(tree, q)
+node **tree;
+*/
+
 
 
 delete(tree, q)
@@ -42,16 +49,21 @@ char *q;
 	printf("deleting\n");*/
 
 	node **tmp;
+	node **dad;
 	//printf("made node tmp\n");
 
-	tmp = contains(&*tree,q);
+	contains(&(*tree),q);
+	tmp = *t;
+	dad = &(*tmp)->p;	
 
 	printf("out of contains\n");
 	
 	if(tmp){	
 		printf("tmp.name: %s\n", (*tmp)->name);
 
-		printf("parent= %d\n", (*tmp)->p);
+		printf("parent= %x\n", ((*tmp)->p));
+		printf("p2= %x\n", dad);
+		//printf("p.name: %s\n", *((*tmp)->p)->name);
 	}
 	
 	/*
@@ -64,7 +76,7 @@ char *q;
 insert(tree, item, parent)
 node **tree;
 node *item;
-node **parent;
+node *parent;
 {
 	if(!(*tree)) {
 		*tree = item;
@@ -120,6 +132,7 @@ char **argv, **envp;
 	node *curr, *root;
 
 	root = 0;
+	t = (node *)malloc(sizeof(node));
 
 	while (gets(buf)) {
 		b = &(buf[2]);
