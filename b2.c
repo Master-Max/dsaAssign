@@ -54,24 +54,43 @@ char *q;
 
 	contains(&(*tree),q);
 	tmp = *t;
-	dad = &(*tmp)->p;	
+	dad = *(&(*tmp)->p);	//To reference pointer in pointer - *(&(*pntr)->o)
 
 	printf("out of contains\n");
 	
 	if(tmp){	
 		printf("tmp.name: %s\n", (*tmp)->name);
 
-		printf("parent= %x\n", ((*tmp)->p));
+		printf("p1= %x\n", ((*tmp)->p));
 		printf("p2= %x\n", dad);
+		printf("p.name= %s\n", (*dad)->name);
 		//printf("p.name: %s\n", *((*tmp)->p)->name);
 	}
 	
+//	if((!(tmp->l))&&(!(tmp->r))){
+//		rl(&(*tree), q, (*dad)->name);
+//	}	
 	/*
 	if(!(*tmp)->l && (*tmp)-r){
 		((*tmp)->p)->r = 
 	}*/
 }
-
+/*
+rl(tree, q, d)
+node **tree;
+char *q;
+char *d;
+{
+	if(strcmp(d,(*tree)->name) = 0){
+		if(strcmp(*(&(*tree)->r)->name, q) = 0)
+			*(&(*tree)->r = 0;
+		if(strcmp(*(&(*tree)->l)->name, q) = 0)
+			*(&(*tree)->l = 0;
+	}
+	rl(&(*tree)->l, q, d);
+	rl(&(*tree)->r, q, d);
+}
+*/
 
 insert(tree, item, parent)
 node **tree;
