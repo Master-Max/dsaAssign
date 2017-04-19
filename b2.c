@@ -13,17 +13,18 @@ contains(tree, q)
 node **tree;
 char *q;
 {
+	*t = NULL;
 	//node **t = NULL;
 	//t = (node *)malloc(sizeof(node));
 	if(!(*tree)){
-		printf("no node\n");
+		//printf("no node\n");
 		return;
 	}
 
 	if (strcmp((*tree)->name, q) == 0){
 		printf("yes\n");
-		printf("contains= %x\n", tree);
-		printf("name= %s\n", (*tree)->name);
+		//printf("contains= %x\n", tree);
+		//printf("name= %s\n", (*tree)->name);
 		*t = tree;
 		return;
 	}
@@ -32,65 +33,175 @@ char *q;
 	//return t;
 }
 
-/*
-find(tree, q)
+examine(tree, q)
 node **tree;
-*/
-
+char *q;
+{
+	node **tmp;
+	contains(&(*tree),q);
+	tmp = *t;
+	if(tmp){
+		printf("M\n name: %s\n addr: %x\n",(*tmp)->name,tmp);
+		if(((*tmp)->p)){
+			printf("P\n name: %s\n addr: %x\n",((*tmp)->p)->name,(*tmp)->p);
+		}
+		if(((*tmp)->l)){
+			printf("L\n name: %s\n addr: %x\n",((*tmp)->l)->name,(*tmp)->l);
+		}
+		if(((*tmp)->r)){
+			printf("R\n name: %s\n addr: %x\n",((*tmp)->r)->name,(*tmp)->r);
+		}
+	}
+}
 
 
 delete(tree, q)
 node **tree;
 char *q;
 {
-	/*printf("comparing...\n");
-	contains(&*tree,q);
-
-	printf("deleting\n");*/
-
 	node **tmp;
 	node **dad;
-	//printf("made node tmp\n");
+	node **dub;
+	node **mom;
 
 	contains(&(*tree),q);
 	tmp = *t;
 	dad = *(&(*tmp)->p);	//To reference pointer in pointer - *(&(*pntr)->o)
+	//printf("out of contains\n");
 
-	printf("out of contains\n");
-	
-	if(tmp){	
+	if(tmp){//Checks what the tmp and parent are
 		printf("tmp.name: %s\n", (*tmp)->name);
-
-		printf("p1= %x\n", ((*tmp)->p));
-		printf("p2= %x\n", dad);
+		//printf("p1= %x\n", ((*tmp)->p));
+		//printf("p2= %x\n", dad);
 		printf("p.name= %s\n", (*dad)->name);
-		//printf("p.name: %s\n", *((*tmp)->p)->name);
 	}
-	
-//	if((!(tmp->l))&&(!(tmp->r))){
-//		rl(&(*tree), q, (*dad)->name);
-//	}	
+
+	if((!((*tmp)->l))&&(!((*tmp)->r))){//No LEFT, No RIGHT: Case 1
+		printf("L:N | R:N\n");
+		(*tmp = NULL);
+	}
+	else if(((*tmp)->l)&&(!((*tmp)->r))){//Yes LEFT, No RIGHT: Case 2
+		printf("L:Y | R:N\n");
+		printf("dad.l: %s\ndad.r: %s\n", (((*dad)->l)->name),(((*dad)->r)->name));
+		printf("dad.name: %s\ntmp.name: %s\n", ((*dad)->name),((*tmp)->name));
+		if(strcmp(((*tmp)->name), ((*dad)->name)) < 0){
+			printf("replacing dad.l\n");
+			(*dad)->l = (*tmp)->l;
+		}
+		if(strcmp(((*tmp)->name), ((*dad)->name)) > 0){
+			printf("replacing dad.r\n");
+			(*dad)->r = (*tmp)->l;
+		}
+	}
+	else if((!((*tmp)->l))&&((*tmp)->r)){//No LEFT, Yes RIGHT: Case 3
+		printf("L:N | R:Y\n");
+		printf("dad.l:%s\ndad.r:%s\n", (((*dad)->l)->name),(((*dad)->r)->name));
+		printf("dad.name: %s\ntmp.name: %s\n", ((*dad)->name),((*tmp)->name));
+		if(strcmp(((*tmp)->name), ((*dad)->name)) < 0){//Left
+			printf("replacing dad.l\n");
+			(*dad)->l = (*tmp)->r;
+		}
+		if(strcmp(((*tmp)->name), ((*dad)->name)) > 0){//Right
+			printf("replacing dad.r\n");
+			(*dad)->r = (*tmp)->r;
+		}
+	}
+	else if(((*tmp)->l)&&((*tmp)->r)){//Yes LEFT, Yes RIGHT: Case 4
+		printf("L:Y | R:Y\n");
+		findKid(&(*tmp),0);
+		dub = *t;
+		mom = *(&(*dub)->p);
+		printf("\nmom: %s\ndub: %s\n", (*mom)->name, (*dub)->name);
+		if(strcmp(((*mom)->name), ((*tmp)->name)) == 0){
+			printf("mom name\n");
+			(*dub)->r = (*tmp)->r;
+			if(strcmp(((*tmp)->name), ((*dad)->name)) < 0){//Left
+				printf("replacing dad.l\n");
+				(*dad)->l = (*dub);
+			}
+			else if(strcmp(((*tmp)->name), ((*dad)->name)) > 0){//Right
+				printf("replacing dad.r\n");
+				(*dad)->r = (*dub);
+			}
+		}
+		else{
+			if((*dub)->l)
+				(*mom)->r = (*dub)->l;
+
+			if(strcmp(((*tmp)->name), ((*dad)->name)) < 0){//Left
+				printf("replacing dad.l\n");
+				(*dad)->l = (*dub);
+			}
+			else if(strcmp(((*tmp)->name), ((*dad)->name)) > 0){//Right
+				printf("replacing dad.r\n");
+				(*dad)->r = (*dub);
+			}
+			(*dub)->r = (*tmp)->r;
+			(*dub)->l = (*tmp)->l;
+		}
+	}
 	/*
-	if(!(*tmp)->l && (*tmp)-r){
-		((*tmp)->p)->r = 
-	}*/
+	else if(((*tmp)->l)&&((*tmp)->r)){//Yes LEFT, Yes RIGHT: Case 4
+		printf("L:Y | R:Y\n");
+		printf("tmp.name: %s\n", ((*tmp)->name));
+
+		findKid(&(*tmp),0);
+
+		dub = *t;
+		mom = *(&(*dub)->p);
+
+		printf("\nmom: %s\ndub: %s\n", (*mom)->name, (*dub)->name);
+
+		if((*dub)->name != (*tmp->l))
+			(*dub)->l = (*tmp)->l;
+		if((*dub)->name != (*tmp->r))
+			(*dub)->r = (*tmp)->r;
+
+		if(strcmp(((*tmp)->name), ((*dad)->name)) < 0){//L
+				(*dad)->l = (*dub);
+			}
+			else if(strcmp(((*tmp)->name), ((*dad)->name)) > 0){//R
+				(*dad)->r = (*dub);
+			}
+
+			(*mom)->l = 0;
+		}
+		else if(strcmp(((*dub)->name), ((*mom)->name)) > 0){//R
+			if(strcmp(((*tmp)->name), ((*dad)->name)) < 0){//L
+				(*dad)->l = (*dub);
+			}
+			else if(strcmp(((*tmp)->name), ((*dad)->name)) > 0){//R
+				(*dad)->r = (*dub);
+			}
+
+			(*mom)->r = 0;
+		}
+		*/
+	printf("out of ifs\n");
 }
-/*
-rl(tree, q, d)
+
+findKid(tree, n)
 node **tree;
-char *q;
-char *d;
+int n;
 {
-	if(strcmp(d,(*tree)->name) = 0){
-		if(strcmp(*(&(*tree)->r)->name, q) = 0)
-			*(&(*tree)->r = 0;
-		if(strcmp(*(&(*tree)->l)->name, q) = 0)
-			*(&(*tree)->l = 0;
+	if(*tree){
+		printf("Finding Kid...\nN: %s\n", (*tree)->name);
+		*t = tree;
+		if(((*tree)->l)&&(n==0)){//One Left then Right
+			findKid(&(*tree)->l, 1);
+		}
+		else if(((*tree)->r)&&(n==0)){//One Right then Left
+			findKid(&(*tree)->r, 2);
+		}
+		if(n==1){//Keep Right
+			findKid(&(*tree)->r, 1);
+		}
+		if(n==2){//Keep Left
+			findKid(&(*tree)->l, 2);
+		}
 	}
-	rl(&(*tree)->l, q, d);
-	rl(&(*tree)->r, q, d);
+	printf("Found Kid\n");
 }
-*/
 
 insert(tree, item, parent)
 node **tree;
@@ -163,9 +274,10 @@ char **argv, **envp;
 			insert(&root, curr, &root);
 		}
 		if (buf[0] == 'd') {
-			//printf("comparing...\n");
-			//contains(&root,b);
 			delete(&root,b);
+		}
+		if (buf[0] == 'e'){
+			examine(&root,b);
 		}
 
 
