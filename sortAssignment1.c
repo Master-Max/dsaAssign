@@ -7,7 +7,7 @@ printData(d,n)
 int *d,n;
 {
 	int i;
-	for (i=0; i<n; i++) 
+	for (i=0; i<n; i++)
 		printf("data[%d] = %d\n", i, d[i]);
 }
 
@@ -16,36 +16,51 @@ int *d,n;
 selectionSortAscending(d, n)
 int *d, n;
 {
-	int c = 0;
-	int min = 0;
-	int tmp = 0;
-	int i;
-	printf("N:%d\n",n);
-
+	//printf("sSAsc:\n");
+	int u, i, a, m, min, tmp;
+	//int *tmp;
 	for(i=0; i<n; i++){
-		min = d[i];
-		for(int l=i;l<n;l++){
-			if(d[l]<min)
-				min=d[l];
+		a = d[i];
+		min = a;
+		//printf("\nsort %d: %d\n", i, a);
+		//printf("adress: %d\n", &d[i]);
+		for(u=i; u<n; u++){
+			if(d[u] < min){
+				//printf("new min: %d\n", d[u]);
+				m = u;
+				min = d[u];
+			}
 		}
-		
+		if(min < d[i]){
+			tmp = d[i];
+			d[i] = d[m];
+			d[m] = tmp;
+			//printf("rep d[%i]: %d\n",i,d[i]);
+			//printData(d, n);
+		}
 	}
 }
-
-
-/*
-	if(d[l]<d[c]){
-		tmp = d[c];
-		d[c] = d[l]
-		d[l] = tmp;
-		c++;
-}*/
-
 
 /* FILL ME IN */
 insertionSortDescending(d, n)
 int *d, n;
 {
+	int u, i, a, m, max, tmp;
+	for(i=0; i<n; i++){
+		a = d[i];
+		max = a;
+		for(u=i; u<n; u++){
+			if(d[u] > max){
+				m = u;
+				max = d[u];
+			}
+		}
+		if(max > d[i]){
+			tmp = d[i];
+			d[i] = d[m];
+			d[m] = tmp;
+		}
+	}
 }
 
 
@@ -82,5 +97,3 @@ char **argv, **envp;
 	printf("After insertion sort\n"); sleep(1);
 	printData(data, n);
 }
-
-
