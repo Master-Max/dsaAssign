@@ -2,12 +2,22 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main(){
+int main(argc, argv)
+int argc;
+char **argv;
+{
 
 	srand(time(NULL));
 	
-	for(int i = 0; i<10; i++){
-		int r = rand() %101;
+	if(argc !=2){
+		printf("Your Dumb");
+		exit(1);
+	}
+
+	int n = atoi(argv[1]);
+
+	for(int i = 0; i<n; i++){
+		int r = rand() %n+1;
 		printf("%d\n",r);
 	}
 }
