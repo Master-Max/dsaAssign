@@ -7,7 +7,7 @@ printData(d,n)
 int *d,n;
 {
 	int i;
-	for (i=0; i<n; i++) 
+	for (i=0; i<n; i++)
 		printf("data[%d] = %d\n", i, d[i]);
 }
 
@@ -26,9 +26,31 @@ int *d, n;
 heapSort(d, n)
 int *d, n;
 {
+	int top,i,tmp;
+	int *heap;
+	heap = calloc(n, sizeof(n));
+
+	heap = d;
+
+	for(i=0;i<n;i++){
+		heap[i] = d[0];
+		heapify(d,n);
+	}
 }
 
+heapify(d, n)
+int *d, n;
+{
+	for(int i=0;i<n;i++){
+		if(d[i]<d[0]){
+			tmp = d[0];
+			d[i] = d[0];
+			d[i] = tmp;
+	}
+}
 
+//THIS ISNT A HEAP, need to replace
+//top with last in
 
 
 main(argc, argv, envp)
@@ -60,5 +82,3 @@ char **argv, **envp;
 	printf("After sort\n");
 	printData(data, n);
 }
-
-
