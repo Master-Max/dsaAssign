@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 
 
 printData(d,n)
@@ -26,26 +27,42 @@ int *d, n;
 heapSort(d, n)
 int *d, n;
 {
+	//printf("heapSort\n");
 	int top,i,tmp;
 	int *heap;
-	heap = calloc(n, sizeof(n));
-
-	heap = d;
+	heap = calloc(n, sizeof(int));
 
 	for(i=0;i<n;i++){
-		heap[i] = d[0];
 		heapify(d,n);
+		//printf("d[0]:%d\n", d[0]);
+		heap[i] = d[0];
+		//printf("d[n]:%d\n", d[n-(i+1)]);
+		d[0] = d[n-(i+1)];
+		d[n-(i+1)] = INT_MAX;
 	}
+	
+	for(i=0;i<n;i++){
+		d[i]=heap[i];
+	}
+	//printData(heap,n);
+	//d = heap;
 }
 
 heapify(d, n)
 int *d, n;
 {
-	for(int i=0;i<n;i++){
-		if(d[i]<d[0]){
-			tmp = d[0];
-			d[i] = d[0];
-			d[i] = tmp;
+	//printf("heapify\n");
+	int tmp, min, a, i;
+	min = d[0];
+	for(i=0;i<n;i++){
+		if(min>d[i]){
+			min=d[i];
+			a=i;
+		}
+	}
+	if(min<d[0]){
+		d[a]=d[0];
+		d[0]=min;	
 	}
 }
 
