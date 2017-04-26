@@ -16,17 +16,12 @@ int *d,n;
 selectionSortAscending(d, n)
 int *d, n;
 {
-	//printf("sSAsc:\n");
 	int u, i, a, m, min, tmp;
-	//int *tmp;
 	for(i=0; i<n; i++){
 		a = d[i];
 		min = a;
-		//printf("\nsort %d: %d\n", i, a);
-		//printf("adress: %d\n", &d[i]);
 		for(u=i; u<n; u++){
 			if(d[u] < min){
-				//printf("new min: %d\n", d[u]);
 				m = u;
 				min = d[u];
 			}
@@ -35,8 +30,6 @@ int *d, n;
 			tmp = d[i];
 			d[i] = d[m];
 			d[m] = tmp;
-			//printf("rep d[%i]: %d\n",i,d[i]);
-			//printData(d, n);
 		}
 	}
 }

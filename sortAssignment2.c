@@ -33,14 +33,18 @@ int *d, n;
 	heap = calloc(n, sizeof(int));
 
 	for(i=0;i<n;i++){
-		heapify(d,n);
+		heapify(d,(n-i));
 		//printf("d[0]:%d\n", d[0]);
 		heap[i] = d[0];
 		//printf("d[n]:%d\n", d[n-(i+1)]);
+		//d[0] = d[n-(i+1)];
+		//d[n-(i+1)] = INT_MAX;
 		d[0] = d[n-(i+1)];
-		d[n-(i+1)] = INT_MAX;
+		memcpy(d, d, (n-1)*sizeof(int));
+
+		//n--;//THIS MIGHT F IT UP
 	}
-	
+
 	for(i=0;i<n;i++){
 		d[i]=heap[i];
 	}
@@ -55,6 +59,7 @@ int *d, n;
 	int tmp, min, a, i;
 	min = d[0];
 	for(i=0;i<n;i++){
+		//printf(".");
 		if(min>d[i]){
 			min=d[i];
 			a=i;
@@ -62,8 +67,9 @@ int *d, n;
 	}
 	if(min<d[0]){
 		d[a]=d[0];
-		d[0]=min;	
+		d[0]=min;
 	}
+	//printf("\n");
 }
 
 //THIS ISNT A HEAP, need to replace
